@@ -1,11 +1,17 @@
 FROM openjdk:8-jdk-alpine
 WORKDIR /app
 
-ARG VERSION
-ENV VERSION ${VERSION:-0.0.0-alpha.0}
+# Build arguments
+ARG VERSION=0.0.0-alpha.0
+ARG SERVICE_JAR=SampleSQS-${VERSION}.jar
 
-ARG SERVICE_JAR
-ENV SERVICE_JAR ${SERVICE_JAR:-SampleSQS-${VERSION}.jar}
+# Set environment variables
+ENV VERSION=${VERSION}
+ENV SERVICE_JAR=${SERVICE_JAR}
+ENV JAVA_TOOL_OPTIONS="-Dcom.amazonaws.sdk.disableEc2Metadata=true"
 
+# Copy JAR
 COPY target/${SERVICE_JAR} app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+# Run the application
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_TOOL_OPTIONS -jar app.jar"]

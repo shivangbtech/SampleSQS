@@ -12,12 +12,10 @@ services:
   elasticmq:
     image: softwaremill/elasticmq-native
     ports:
-      - "9324:9324"
+      - "9324:9324"  # SQS endpoint
+      - "9325:9325"  # Web UI
     environment:
       - JAVA_OPTS=-Delasticmq.rest.port=9324
       - CONFIG_FILE=/opt/elasticmq.conf
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://elasticmq:9324" ]
-      interval: 5s
-      retries: 5
-      start_period: 5s
+      - ELASTICMQ_UI=true
+      - JAVA_OPTS=-Dconfig.file=/opt/elasticmq.conf
