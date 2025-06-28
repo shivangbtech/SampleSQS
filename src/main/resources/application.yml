@@ -1,0 +1,31 @@
+cloud:
+  aws:
+    credentials:
+      access-key: dummy
+      secret-key: dummy
+      instance-profile: false
+    region:
+      auto: false
+      static: us-east-1
+    sqs:
+      endpoint: http://elasticmq:9324
+    stack:
+      auto: false
+sqs:
+  standard:
+    queue:
+      name: my-standard-queue
+      url: http://elasticmq:9324/000000000000/my-standard-queue
+  fifo:
+    queue:
+      name: my-fifo-queue.fifo
+      url: http://elasticmq:9324/000000000000/my-fifo-queue.fifo
+  dlq:
+    queue:
+      name: my-dlq-queue
+      url: http://elasticmq:9324/000000000000/my-dlq-queue
+logging:
+  level:
+    root: INFO
+    com.amazonaws: DEBUG
+    org.springframework.cloud.aws: DEBUG
