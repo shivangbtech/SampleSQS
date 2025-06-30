@@ -10,10 +10,10 @@ import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+//@Component
 public class SqsQueueInitializer {
 
-  @Autowired
+//  @Autowired
   private AmazonSQS amazonSQS;
 
   @PostConstruct

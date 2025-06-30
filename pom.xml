@@ -11,6 +11,8 @@
   <properties>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <spring.boot.version>2.6.12</spring.boot.version>
+    <spring-cloud-aws.version>2.2.6.RELEASE</spring-cloud-aws.version>
   </properties>
 
 
@@ -23,17 +25,20 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- Spring Boot BOM -->
       <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>2021.0.6</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring.boot.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+
+      <!-- Spring Cloud AWS BOM -->
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-aws-dependencies</artifactId>
-        <version>2.2.6.RELEASE</version>
+        <version>${spring-cloud-aws.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -43,17 +48,26 @@
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+
+    <!-- Spring Boot Web -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+
+    <!-- Spring Cloud AWS Messaging (SQS support) -->
     <dependency>
       <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-aws-messaging</artifactId>
+      <artifactId>spring-cloud-aws-messaging</artifactId>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>software.amazon.awssdk</groupId>-->
-<!--      <artifactId>sqs</artifactId>-->
-<!--      <version>2.20.160</version>-->
-<!--    </dependency>-->
+
+    <!-- AWS SDK (v1) explicitly if needed -->
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-java-sdk-sqs</artifactId>
+    </dependency>
   </dependencies>
 
   <build>

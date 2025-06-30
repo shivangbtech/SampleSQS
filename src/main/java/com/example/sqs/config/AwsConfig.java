@@ -6,6 +6,10 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQSAsync;
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.aws.messaging.config.QueueMessageHandlerFactory;
+import org.springframework.cloud.aws.messaging.config.SimpleMessageListenerContainerFactory;
+import org.springframework.cloud.aws.messaging.listener.QueueMessageHandler;
+import org.springframework.cloud.aws.messaging.listener.SimpleMessageListenerContainer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -22,15 +26,56 @@ public class AwsConfig {
   @Value("${cloud.aws.credentials.secret-key}")
   private String secretKey;
 
-  @Value("${cloud.aws.sqs.endpoint}")
+  @Value("${cloud.aws.sqs.endpoint:http://elasticmq:9324}")
   private String endpoint;
 
   @Bean
   @Primary
   public AmazonSQSAsync amazonSQSAsync() {
+    System.out.println("Shivang amazonSQSAsync is called");
     return AmazonSQSAsyncClientBuilder.standard()
-        .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region))
+        .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://elasticmq:9324", region))
         .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
         .build();
+  }
+
+  @Bean
+  public SimpleMessageListenerContainerFactory simpleMessageListenerContainerFactory(AmazonSQSAsync amazonSQSAsync) {
+    System.out.println("Shivang simpleMessageListenerContainerFactory is called");
+    SimpleMessageListenerContainerFactory factory = new SimpleMessageListenerContainerFactory();
+    factory.setAmazonSqs(amazonSQSAsync);
+    return factory;
+  }
+//
+//  @Bean
+//  public SimpleMessageListenerContainer simpleMessageListenerContainer() {
+//    return null; // or throw new UnsupportedOperationException()
+//  }
+
+  @Bean
+  @Primary
+  public SimpleMessageListenerContainer simpleMessageListenerContainer(AmazonSQSAsync amazonSQSAsync) {
+    System.out.println("Shivang simpleMessageListenerContainer is called");
+    if(amazonSQSAsync == null){
+      System.out.println("Shivang amazonSQSAsync is null");
+    }
+    SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+    container.setAmazonSqs(amazonSQSAsync);
+    container.setMessageHandler(queueMessageHandler(amazonSQSAsync));
+    container.setMaxNumberOfMessages(10);
+    container.setWaitTimeOut(10);
+    container.setAutoStartup(true);
+    return container;
+  }
+
+  @Bean
+  public QueueMessageHandler queueMessageHandler(AmazonSQSAsync amazonSQSAsync) {
+    System.out.println("Shivang queueMessageHandler is called");
+    if(amazonSQSAsync == null){
+      System.out.println("Shivang amazonSQSAsync is null");
+    }
+    QueueMessageHandlerFactory factory = new QueueMessageHandlerFactory();
+    factory.setAmazonSqs(amazonSQSAsync);
+    return factory.createQueueMessageHandler();
   }
 }
