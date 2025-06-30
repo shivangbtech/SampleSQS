@@ -39,13 +39,13 @@ public class AwsConfig {
         .build();
   }
 
-  @Bean
-  public SimpleMessageListenerContainerFactory simpleMessageListenerContainerFactory(AmazonSQSAsync amazonSQSAsync) {
-    System.out.println("Shivang simpleMessageListenerContainerFactory is called");
-    SimpleMessageListenerContainerFactory factory = new SimpleMessageListenerContainerFactory();
-    factory.setAmazonSqs(amazonSQSAsync);
-    return factory;
-  }
+//  @Bean
+//  public SimpleMessageListenerContainerFactory simpleMessageListenerContainerFactory(AmazonSQSAsync amazonSQSAsync) {
+//    System.out.println("Shivang simpleMessageListenerContainerFactory is called");
+//    SimpleMessageListenerContainerFactory factory = new SimpleMessageListenerContainerFactory();
+//    factory.setAmazonSqs(amazonSQSAsync);
+//    return factory;
+//  }
 //
 //  @Bean
 //  public SimpleMessageListenerContainer simpleMessageListenerContainer() {
@@ -54,7 +54,9 @@ public class AwsConfig {
 
   @Bean
   @Primary
-  public SimpleMessageListenerContainer simpleMessageListenerContainer(AmazonSQSAsync amazonSQSAsync) {
+  public SimpleMessageListenerContainer simpleMessageListenerContainer() {
+
+    AmazonSQSAsync amazonSQSAsync = amazonSQSAsync();
     System.out.println("Shivang simpleMessageListenerContainer is called");
     if(amazonSQSAsync == null){
       System.out.println("Shivang amazonSQSAsync is null");
