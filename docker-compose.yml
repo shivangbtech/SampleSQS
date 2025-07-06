@@ -1,16 +1,16 @@
 version: "3.8"
 services:
-  app:
-    build: .
-    ports:
-      - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=default
-      - SERVICE_SQS_CONNECTION_URL=http://elasticmq:9324
-    depends_on:
-      - elasticmq
-    networks:
-      - sqs-net
+#  app:
+#    build: .
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=default
+#      - SERVICE_SQS_CONNECTION_URL=http://elasticmq:9324
+#    depends_on:
+#      - elasticmq
+#    networks:
+#      - sqs-net
 
   elasticmq:
     image: softwaremill/elasticmq-native

@@ -41,6 +41,7 @@ This project demonstrates how to use **Spring Boot** with **AWS SQS** using **El
 ```bash
 mvn clean package -DskipTests
 ```
+Run the Spring-boot Application from intellij
 
 ## Run using Docker Compose:
 ```bash
